@@ -60,13 +60,21 @@ def index(request: Request):
 @app.get("/projects", response_class=HTMLResponse)
 def projects(request: Request):
     return templates.TemplateResponse(
-        request, "projects.html", {"projects": PROJECTS}
+        request, "projects.html", {
+            "projects": PROJECTS,
+            "breadcrumbs": [{"label": "projects", "url": None}],
+        }
     )
 
 
 @app.get("/blog", response_class=HTMLResponse)
 def blog(request: Request):
-    return templates.TemplateResponse(request, "blog.html", {"posts": load_posts()})
+    return templates.TemplateResponse(
+        request, "blog.html", {
+            "posts": load_posts(),
+            "breadcrumbs": [{"label": "blog", "url": None}],
+        }
+    )
 
 
 @app.get("/blog/{slug}", response_class=HTMLResponse)
@@ -76,6 +84,13 @@ def post(request: Request, slug: str):
             return templates.TemplateResponse(
                 request,
                 "post.html",
-                {"post": p, "body_html": render_markdown(p["body"])},
+                {
+                    "post": p,
+                    "body_html": render_markdown(p["body"]),
+                    "breadcrumbs": [
+                        {"label": "blog", "url": "/blog"},
+                        {"label": p["title"], "url": None},
+                    ],
+                },
             )
     raise HTTPException(status_code=404, detail="Post not found")

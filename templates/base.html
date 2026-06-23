@@ -18,6 +18,22 @@
       </nav>
     </header>
 
+    {% if breadcrumbs %}
+    <div class="breadcrumb-bar">
+      <div class="container breadcrumbs">
+        <a href="/">home</a>
+        {% for crumb in breadcrumbs %}
+          <span class="bc-sep">/</span>
+          {% if crumb.url %}
+            <a href="{{ crumb.url }}">{{ crumb.label }}</a>
+          {% else %}
+            <span class="bc-current">{{ crumb.label }}</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
     <main class="container">
       {% block content %}{% endblock %}
     </main>

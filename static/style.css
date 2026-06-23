@@ -387,6 +387,39 @@ main.container { flex: 1; padding-block: 2.75rem; }
 }
 .prose hr { border: none; border-top: 1px solid var(--border); }
 
+/* ── Breadcrumbs ─────────────────────────────────────────────── */
+.breadcrumb-bar {
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+  padding-block: .6rem;
+  font-size: .8125rem;
+  color: var(--faint);
+  flex-wrap: wrap;
+}
+
+.breadcrumbs a {
+  color: var(--muted);
+  transition: color .15s;
+}
+.breadcrumbs a:hover { color: var(--green); }
+
+.bc-sep { color: var(--border-h); user-select: none; }
+
+.bc-current {
+  color: var(--fg);
+  font-weight: 500;
+  max-width: 28ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 520px) {
   .post-link { grid-template-columns: 1fr; gap: .25rem; }
