@@ -1,9 +1,12 @@
 import os
 import re
+import time
+from collections import defaultdict
 from datetime import date, datetime
 from pathlib import Path
 
 import bcrypt
+import bleach
 import frontmatter
 import markdown
 from dotenv import load_dotenv
@@ -24,6 +27,19 @@ ADMIN_PASSWORD_HASH = os.getenv("ADMIN_PASSWORD_HASH", "").encode()
 
 app = FastAPI(title="arseniy")
 app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
+
+# ── Rate limiting ─────────────────────────────────────────────
+_login_attempts: dict[str, list[float]] = defaultdict(list)
+_RATE_LIMIT = 5        # max failed attempts
+_RATE_WINDOW = 15 * 60 # window in seconds
+
+def _is_rate_limited(ip: str) -> bool:
+    now = time.time()
+    _login_attempts[ip] = [t for t in _login_attempts[ip] if now - t < _RATE_WINDOW]
+    return len(_login_attempts[ip]) >= _RATE_LIMIT
+
+def _record_failure(ip: str) -> None:
+    _login_attempts[ip].append(time.time())
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
@@ -80,8 +96,25 @@ def load_all_posts() -> list[dict]:
     return posts
 
 
+_ALLOWED_TAGS = [
+    "p", "br", "hr",
+    "h1", "h2", "h3", "h4", "h5", "h6",
+    "ul", "ol", "li",
+    "strong", "em", "del", "code", "pre", "blockquote",
+    "a", "img",
+    "table", "thead", "tbody", "tr", "th", "td",
+]
+_ALLOWED_ATTRS = {
+    "a": ["href", "title"],
+    "img": ["src", "alt", "title"],
+    "code": ["class"],
+    "th": ["align"],
+    "td": ["align"],
+}
+
 def render_markdown(text: str) -> str:
-    return markdown.markdown(text, extensions=["fenced_code", "tables"])
+    html = markdown.markdown(text, extensions=["fenced_code", "tables"])
+    return bleach.clean(html, tags=_ALLOWED_TAGS, attributes=_ALLOWED_ATTRS)
 
 
 def slugify(title: str) -> str:
@@ -125,12 +158,20 @@ def login_admin(
     username: str = Form(...),
     password: str = Form(...),
 ):
+    ip = request.client.host
+    if _is_rate_limited(ip):
+        return templates.TemplateResponse(
+            request, "login.html",
+            {"error": "too many failed attempts — try again in 15 minutes"},
+            status_code=429,
+        )
     valid = (
         username == ADMIN_USERNAME
         and ADMIN_PASSWORD_HASH
         and bcrypt.checkpw(password.encode(), ADMIN_PASSWORD_HASH)
     )
     if not valid:
+        _record_failure(ip)
         return templates.TemplateResponse(
             request, "login.html",
             {"error": "incorrect username or password"},
