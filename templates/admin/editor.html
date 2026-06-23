@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% if post %}edit post{% else %}new post{% endif %} — arseniy</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="container nav">
+        <a href="/" class="brand">arseniy</a>
+        <div class="nav-admin-actions">
+          <a href="/admin" class="nav-text-link">← dashboard</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container">
+      <h1 class="page-title" style="margin-bottom:2rem">
+        {% if post %}edit post{% else %}new post{% endif %}
+      </h1>
+
+      <form method="post"
+            action="{% if post %}/admin/edit/{{ post.slug }}{% else %}/admin/new{% endif %}"
+            class="editor-form">
+
+        <div class="editor-top">
+          <div class="field field-grow">
+            <label for="title">title</label>
+            <input id="title" name="title" type="text" required
+                   value="{{ post.title if post else '' }}"
+                   placeholder="Post title" />
+          </div>
+          <div class="field field-date">
+            <label for="date">date</label>
+            <input id="date" name="date" type="date" required
+                   value="{{ post.date if post else today }}" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="description">description <span class="label-hint">shown in listing</span></label>
+          <input id="description" name="description" type="text"
+                 value="{{ post.description if post else '' }}"
+                 placeholder="Short summary of the post" />
+        </div>
+
+        <div class="field">
+          <label for="body">content <span class="label-hint">markdown</span></label>
+          <textarea id="body" name="body" rows="22"
+                    placeholder="Write your post in markdown...">{{ post.body if post else '' }}</textarea>
+        </div>
+
+        <div class="editor-footer">
+          <label class="checkbox-label">
+            <input type="checkbox" name="draft" value="true"
+                   {% if post and post.draft %}checked{% endif %} />
+            save as draft
+          </label>
+          <div class="editor-actions">
+            <a href="/admin" class="btn btn-ghost">cancel</a>
+            <button type="submit" class="btn btn-primary">
+              {% if post %}save changes{% else %}publish post{% endif %}
+            </button>
+          </div>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

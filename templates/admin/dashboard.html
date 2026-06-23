@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>admin — arseniy</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="container nav">
+        <a href="/" class="brand">arseniy</a>
+        <div class="nav-admin-actions">
+          <a href="/" class="nav-text-link">← back to site</a>
+          <form method="post" action="/admin/logout" style="display:inline">
+            <button type="submit" class="btn-logout">logout</button>
+          </form>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container">
+      <div class="admin-header">
+        <div>
+          <h1 class="page-title">blog posts</h1>
+          <p class="page-sub-sm">{{ posts|length }} post{% if posts|length != 1 %}s{% endif %}</p>
+        </div>
+        <a href="/admin/new" class="btn btn-primary">+ new post</a>
+      </div>
+
+      {% if not posts %}
+      <div class="empty-state">
+        <p>no posts yet</p>
+        <a href="/admin/new" class="btn btn-primary" style="margin-top:1rem">write your first post</a>
+      </div>
+      {% else %}
+      <div class="admin-post-list">
+        {% for post in posts %}
+        <div class="admin-post-row">
+          <div class="admin-post-info">
+            <div class="admin-post-title">
+              {{ post.title }}
+              {% if post.draft %}
+              <span class="draft-badge">draft</span>
+              {% endif %}
+            </div>
+            <div class="admin-post-meta">
+              {{ post.date }} · /blog/{{ post.slug }}
+            </div>
+          </div>
+          <div class="admin-post-actions">
+            <a href="/blog/{{ post.slug }}" target="_blank" class="action-link">view ↗</a>
+            <a href="/admin/edit/{{ post.slug }}" class="action-link">edit</a>
+            <form method="post" action="/admin/delete/{{ post.slug }}"
+                  onsubmit="return confirm('Delete «{{ post.title }}»?')">
+              <button type="submit" class="action-link action-delete">delete</button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </main>
+  </body>
+</html>

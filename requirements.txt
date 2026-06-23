@@ -1,5 +1,9 @@
+bcrypt
 fastapi
-uvicorn[standard]
+itsdangerous
 jinja2
-python-frontmatter
 markdown
+python-dotenv
+python-frontmatter
+python-multipart
+uvicorn[standard]
