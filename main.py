@@ -1,6 +1,6 @@
 import os
 import re
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 import bcrypt
@@ -39,6 +39,14 @@ PROJECTS = [
 ]
 
 # ── Helpers ───────────────────────────────────────────────────
+def parse_date(value) -> date:
+    if isinstance(value, datetime):
+        return value.date()
+    if isinstance(value, date):
+        return value
+    return datetime.strptime(str(value).strip(), "%Y-%m-%d").date()
+
+
 def load_posts() -> list[dict]:
     posts = []
     for path in BLOG_DIR.glob("*.md"):
@@ -49,7 +57,7 @@ def load_posts() -> list[dict]:
             "slug": path.stem,
             "title": post["title"],
             "description": post.get("description", ""),
-            "date": post["date"],
+            "date": parse_date(post["date"]),
             "body": post.content,
         })
     posts.sort(key=lambda p: p["date"], reverse=True)
@@ -57,7 +65,6 @@ def load_posts() -> list[dict]:
 
 
 def load_all_posts() -> list[dict]:
-    """Load posts including drafts (for admin)."""
     posts = []
     for path in BLOG_DIR.glob("*.md"):
         post = frontmatter.load(path)
@@ -65,7 +72,7 @@ def load_all_posts() -> list[dict]:
             "slug": path.stem,
             "title": post["title"],
             "description": post.get("description", ""),
-            "date": post["date"],
+            "date": parse_date(post["date"]),
             "draft": post.get("draft", False),
             "body": post.content,
         })
