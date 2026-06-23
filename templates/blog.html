@@ -1,21 +1,26 @@
 {% extends "base.html" %}
+{% set active = 'blog' %}
 
 {% block title %}Blog — arseniy{% endblock %}
 
 {% block content %}
-<h1 class="page-title">blog</h1>
-<p class="page-sub">thoughts and write-ups</p>
+<div class="page-header">
+  <h1>blog</h1>
+  <p>thoughts and write-ups</p>
+</div>
 
 {% if not posts %}
-<p style="color: var(--faint)">no posts yet</p>
+<p style="color: var(--faint)">no posts yet — coming soon</p>
 {% else %}
 <ul class="post-list">
   {% for post in posts %}
   <li>
     <a href="/blog/{{ post.slug }}" class="post-link">
-      <time>{{ post.date.strftime('%B %d, %Y') }}</time>
-      <h2>{{ post.title }}</h2>
-      <p>{{ post.description }}</p>
+      <time>{{ post.date.strftime('%b %d, %Y') }}</time>
+      <div class="post-link-body">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.description }}</p>
+      </div>
     </a>
   </li>
   {% endfor %}

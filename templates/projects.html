@@ -1,10 +1,13 @@
 {% extends "base.html" %}
+{% set active = 'projects' %}
 
 {% block title %}Projects — arseniy{% endblock %}
 
 {% block content %}
-<h1 class="page-title">projects</h1>
-<p class="page-sub">things i've built or am building</p>
+<div class="page-header">
+  <h1>projects</h1>
+  <p>things i've built or am building</p>
+</div>
 
 <div class="card-list">
   {% for p in projects %}

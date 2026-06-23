@@ -12,8 +12,8 @@
       <nav class="container nav">
         <a href="/" class="brand">arseniy</a>
         <ul class="nav-links">
-          <li><a href="/projects">projects</a></li>
-          <li><a href="/blog">blog</a></li>
+          <li><a href="/projects" {% if active == 'projects' %}class="active"{% endif %}>projects</a></li>
+          <li><a href="/blog" {% if active == 'blog' %}class="active"{% endif %}>blog</a></li>
         </ul>
       </nav>
     </header>
@@ -24,8 +24,8 @@
 
     <footer class="site-footer">
       <div class="container footer-inner">
-        <span>arseniy</span>
-        <a href="https://github.com/Arseniy404" target="_blank" rel="noopener">github</a>
+        <span>© 2026 arseniy</span>
+        <a href="https://github.com/Arseniy404" target="_blank" rel="noopener">github ↗</a>
       </div>
     </footer>
   </body>
