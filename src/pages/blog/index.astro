@@ -1,0 +1,33 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Layout title="Blog — Arseniy">
+  <h1 class="text-3xl font-bold mb-2 tracking-tight">blog</h1>
+  <p class="text-gray-500 mb-10">thoughts and write-ups</p>
+
+  {posts.length === 0 ? (
+    <p class="text-gray-400">no posts yet</p>
+  ) : (
+    <ul class="space-y-6">
+      {posts.map((post) => (
+        <li>
+          <a href={`/blog/${post.id}`} class="group block">
+            <time class="text-xs text-gray-400 mb-1 block">{fmt(post.data.date)}</time>
+            <h2 class="font-semibold text-lg group-hover:text-gray-500 transition-colors">
+              {post.data.title}
+            </h2>
+            <p class="text-sm text-gray-500 mt-1">{post.data.description}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</Layout>
