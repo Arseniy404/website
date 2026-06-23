@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Blog — arseniy{% endblock %}
+
+{% block content %}
+<h1>blog</h1>
+<p class="muted page-sub">thoughts and write-ups</p>
+
+{% if not posts %}
+<p class="muted">no posts yet</p>
+{% else %}
+<ul class="post-list">
+  {% for post in posts %}
+  <li>
+    <a href="/blog/{{ post.slug }}" class="post-link">
+      <time>{{ post.date.strftime('%B %d, %Y') }}</time>
+      <h2>{{ post.title }}</h2>
+      <p class="muted">{{ post.description }}</p>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

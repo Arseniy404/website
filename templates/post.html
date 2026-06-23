@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} — arseniy{% endblock %}
+{% block description %}{{ post.description }}{% endblock %}
+
+{% block content %}
+<article>
+  <header class="post-header">
+    <a href="/blog" class="back">← blog</a>
+    <h1>{{ post.title }}</h1>
+    <time class="muted">{{ post.date.strftime('%B %d, %Y') }}</time>
+  </header>
+  <div class="prose">
+    {{ body_html | safe }}
+  </div>
+</article>
+{% endblock %}

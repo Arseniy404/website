@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Projects — arseniy{% endblock %}
+
+{% block content %}
+<h1>projects</h1>
+<p class="muted page-sub">things i've built or am building</p>
+
+<div class="card-list">
+  {% for p in projects %}
+  <article class="card">
+    <div class="card-head">
+      <div>
+        <h2>{{ p.title }}</h2>
+        <p class="muted">{{ p.description }}</p>
+        <div class="tags">
+          {% for t in p.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+        </div>
+      </div>
+      <div class="card-links">
+        {% if p.github %}<a href="{{ p.github }}" target="_blank" rel="noopener">github ↗</a>{% endif %}
+        {% if p.demo %}<a href="{{ p.demo }}">demo ↗</a>{% endif %}
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}

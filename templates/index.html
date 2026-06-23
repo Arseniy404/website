@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}arseniy — developer{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>hi, i'm arseniy</h1>
+  <p class="lead">
+    I build things. This is my corner of the internet where I share
+    pet projects, ideas, and write about things I find interesting.
+  </p>
+  <div class="actions">
+    <a href="/projects" class="btn btn-primary">view projects</a>
+    <a href="/blog" class="btn btn-ghost">read blog →</a>
+  </div>
+</section>
+
+<section>
+  <h2 class="section-label">recent projects</h2>
+  <div class="card-list">
+    {% for p in projects %}
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <h3>{{ p.title }}</h3>
+          <p class="muted">{{ p.description }}</p>
+        </div>
+        <div class="tags">
+          {% for t in p.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  <a href="/projects" class="more">all projects →</a>
+</section>
+{% endblock %}
