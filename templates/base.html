@@ -14,6 +14,18 @@
         <ul class="nav-links">
           <li><a href="/projects" {% if active == 'projects' %}class="active"{% endif %}>projects</a></li>
           <li><a href="/blog" {% if active == 'blog' %}class="active"{% endif %}>blog</a></li>
+          {% if role == 'admin' %}
+          <li class="nav-sep"></li>
+          <li><a href="/admin" class="nav-admin-link">admin</a></li>
+          {% endif %}
+          <li class="nav-sep"></li>
+          <li>
+            <form method="post" action="/logout">
+              <button type="submit" class="btn-nav-logout">
+                {% if role == 'guest' %}exit{% else %}logout{% endif %}
+              </button>
+            </form>
+          </li>
         </ul>
       </nav>
     </header>

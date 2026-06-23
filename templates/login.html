@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>welcome — arseniy</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body class="admin-body">
+    <div class="login-wrap">
+      <div class="login-card">
+        <div class="login-logo">arseniy</div>
+        <h1 class="login-title">welcome</h1>
+        <p class="login-sub">sign in to continue, or enter as a guest</p>
+
+        {% if error %}
+        <div class="alert-error">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" action="/login" class="login-form">
+          <div class="field">
+            <label for="username">username</label>
+            <input id="username" name="username" type="text"
+                   autocomplete="username" required />
+          </div>
+          <div class="field">
+            <label for="password">password</label>
+            <input id="password" name="password" type="password"
+                   autocomplete="current-password" required />
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">sign in as admin</button>
+        </form>
+
+        <div class="login-divider">
+          <span>or</span>
+        </div>
+
+        <form method="post" action="/login/guest">
+          <button type="submit" class="btn btn-ghost btn-full">continue as guest</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

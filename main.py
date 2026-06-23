@@ -91,31 +91,86 @@ def slugify(title: str) -> str:
     return slug.strip("-")
 
 
-def is_authenticated(request: Request) -> bool:
-    return request.session.get("authenticated") is True
+# ── Session helpers ───────────────────────────────────────────
+def get_role(request: Request) -> str | None:
+    """Returns 'admin', 'guest', or None."""
+    return request.session.get("role")
 
 
-def check_auth(request: Request):
-    if not is_authenticated(request):
-        raise HTTPException(
-            status_code=303,
-            headers={"Location": "/admin/login"},
+def require_site_access(request: Request):
+    """Any logged-in user (admin or guest) can access public pages."""
+    if get_role(request) is None:
+        raise HTTPException(303, headers={"Location": "/login"})
+
+
+def require_admin(request: Request):
+    """Only admins can access admin pages."""
+    role = get_role(request)
+    if role != "admin":
+        target = "/login" if role is None else "/"
+        raise HTTPException(303, headers={"Location": target})
+
+
+# ── Login / logout ────────────────────────────────────────────
+@app.get("/login", response_class=HTMLResponse)
+def login_page(request: Request):
+    if get_role(request) is not None:
+        return RedirectResponse("/", status_code=303)
+    return templates.TemplateResponse(request, "login.html", {"error": None})
+
+
+@app.post("/login", response_class=HTMLResponse)
+def login_admin(
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...),
+):
+    valid = (
+        username == ADMIN_USERNAME
+        and ADMIN_PASSWORD_HASH
+        and bcrypt.checkpw(password.encode(), ADMIN_PASSWORD_HASH)
+    )
+    if not valid:
+        return templates.TemplateResponse(
+            request, "login.html",
+            {"error": "incorrect username or password"},
+            status_code=401,
         )
+    request.session["role"] = "admin"
+    return RedirectResponse("/", status_code=303)
 
 
-# ── Public routes ─────────────────────────────────────────────
+@app.post("/login/guest")
+def login_guest(request: Request):
+    request.session["role"] = "guest"
+    return RedirectResponse("/", status_code=303)
+
+
+@app.post("/logout")
+def logout(request: Request):
+    request.session.clear()
+    return RedirectResponse("/login", status_code=303)
+
+
+# ── Public routes (require any login) ────────────────────────
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
+    require_site_access(request)
     return templates.TemplateResponse(
-        request, "index.html", {"projects": PROJECTS[:3]}
+        request, "index.html", {
+            "projects": PROJECTS[:3],
+            "role": get_role(request),
+        }
     )
 
 
 @app.get("/projects", response_class=HTMLResponse)
 def projects(request: Request):
+    require_site_access(request)
     return templates.TemplateResponse(
         request, "projects.html", {
             "projects": PROJECTS,
+            "role": get_role(request),
             "breadcrumbs": [{"label": "projects", "url": None}],
         }
     )
@@ -123,9 +178,11 @@ def projects(request: Request):
 
 @app.get("/blog", response_class=HTMLResponse)
 def blog(request: Request):
+    require_site_access(request)
     return templates.TemplateResponse(
         request, "blog.html", {
             "posts": load_posts(),
+            "role": get_role(request),
             "breadcrumbs": [{"label": "blog", "url": None}],
         }
     )
@@ -133,12 +190,14 @@ def blog(request: Request):
 
 @app.get("/blog/{slug}", response_class=HTMLResponse)
 def post(request: Request, slug: str):
+    require_site_access(request)
     for p in load_posts():
         if p["slug"] == slug:
             return templates.TemplateResponse(
                 request, "post.html", {
                     "post": p,
                     "body_html": render_markdown(p["body"]),
+                    "role": get_role(request),
                     "breadcrumbs": [
                         {"label": "blog", "url": "/blog"},
                         {"label": p["title"], "url": None},
@@ -148,41 +207,10 @@ def post(request: Request, slug: str):
     raise HTTPException(status_code=404, detail="Post not found")
 
 
-# ── Auth routes ───────────────────────────────────────────────
-@app.get("/admin/login", response_class=HTMLResponse)
-def login_page(request: Request):
-    if is_authenticated(request):
-        return RedirectResponse("/admin", status_code=303)
-    return templates.TemplateResponse(request, "admin/login.html", {"error": None})
-
-
-@app.post("/admin/login", response_class=HTMLResponse)
-def login(request: Request, username: str = Form(...), password: str = Form(...)):
-    valid = (
-        username == ADMIN_USERNAME
-        and ADMIN_PASSWORD_HASH
-        and bcrypt.checkpw(password.encode(), ADMIN_PASSWORD_HASH)
-    )
-    if not valid:
-        return templates.TemplateResponse(
-            request, "admin/login.html",
-            {"error": "incorrect username or password"},
-            status_code=401,
-        )
-    request.session["authenticated"] = True
-    return RedirectResponse("/admin", status_code=303)
-
-
-@app.post("/admin/logout")
-def logout(request: Request):
-    request.session.clear()
-    return RedirectResponse("/admin/login", status_code=303)
-
-
 # ── Admin routes ──────────────────────────────────────────────
 @app.get("/admin", response_class=HTMLResponse)
 def admin_dashboard(request: Request):
-    check_auth(request)
+    require_admin(request)
     return templates.TemplateResponse(
         request, "admin/dashboard.html", {"posts": load_all_posts()}
     )
@@ -190,7 +218,7 @@ def admin_dashboard(request: Request):
 
 @app.get("/admin/new", response_class=HTMLResponse)
 def admin_new(request: Request):
-    check_auth(request)
+    require_admin(request)
     return templates.TemplateResponse(
         request, "admin/editor.html", {
             "post": None,
@@ -208,22 +236,21 @@ def admin_create(
     draft: bool = Form(False),
     body: str = Form(""),
 ):
-    check_auth(request)
+    require_admin(request)
     slug = slugify(title)
     path = BLOG_DIR / f"{slug}.md"
     if path.exists():
         slug = f"{slug}-2"
         path = BLOG_DIR / f"{slug}.md"
-
-    post = frontmatter.Post(body, title=title, description=description,
-                            date=date_, draft=draft)
-    path.write_text(frontmatter.dumps(post))
-    return RedirectResponse(f"/admin", status_code=303)
+    p = frontmatter.Post(body, title=title, description=description,
+                         date=date_, draft=draft)
+    path.write_text(frontmatter.dumps(p))
+    return RedirectResponse("/admin", status_code=303)
 
 
 @app.get("/admin/edit/{slug}", response_class=HTMLResponse)
 def admin_edit(request: Request, slug: str):
-    check_auth(request)
+    require_admin(request)
     path = BLOG_DIR / f"{slug}.md"
     if not path.exists():
         raise HTTPException(status_code=404)
@@ -253,19 +280,19 @@ def admin_update(
     draft: bool = Form(False),
     body: str = Form(""),
 ):
-    check_auth(request)
+    require_admin(request)
     path = BLOG_DIR / f"{slug}.md"
     if not path.exists():
         raise HTTPException(status_code=404)
-    post = frontmatter.Post(body, title=title, description=description,
-                            date=date_, draft=draft)
-    path.write_text(frontmatter.dumps(post))
+    p = frontmatter.Post(body, title=title, description=description,
+                         date=date_, draft=draft)
+    path.write_text(frontmatter.dumps(p))
     return RedirectResponse("/admin", status_code=303)
 
 
 @app.post("/admin/delete/{slug}")
 def admin_delete(request: Request, slug: str):
-    check_auth(request)
+    require_admin(request)
     path = BLOG_DIR / f"{slug}.md"
     if path.exists():
         path.unlink()
