@@ -16,17 +16,21 @@
 </section>
 
 <section>
-  <h2 class="section-label">recent projects</h2>
+  <p class="section-label">recent projects</p>
   <div class="card-list">
     {% for p in projects %}
     <article class="card">
       <div class="card-head">
         <div>
           <h3>{{ p.title }}</h3>
-          <p class="muted">{{ p.description }}</p>
+          <p class="desc">{{ p.description }}</p>
+          <div class="tags">
+            {% for t in p.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+          </div>
         </div>
-        <div class="tags">
-          {% for t in p.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+        <div class="card-links">
+          {% if p.github %}<a href="{{ p.github }}" target="_blank" rel="noopener">github ↗</a>{% endif %}
+          {% if p.demo %}<a href="{{ p.demo }}">demo ↗</a>{% endif %}
         </div>
       </div>
     </article>
