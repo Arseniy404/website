@@ -52,6 +52,13 @@ PROJECTS = [
         "github": "https://github.com/Arseniy404/website",
         "demo": "/",
     },
+    {
+        "title": "ml notes",
+        "description": "ML / Deep Learning interview prep checklist — 24 topics from basics to LLMs.",
+        "tags": ["machine learning", "deep learning", "nlp"],
+        "github": None,
+        "demo": "/materials",
+    },
 ]
 
 # ── Helpers ───────────────────────────────────────────────────
@@ -213,6 +220,17 @@ def projects(request: Request):
             "projects": PROJECTS,
             "role": get_role(request),
             "breadcrumbs": [{"label": "projects", "url": None}],
+        }
+    )
+
+
+@app.get("/materials", response_class=HTMLResponse)
+def materials_page(request: Request):
+    require_site_access(request)
+    return templates.TemplateResponse(
+        request, "materials.html", {
+            "role": get_role(request),
+            "breadcrumbs": [{"label": "ai agents", "url": None}],
         }
     )
 

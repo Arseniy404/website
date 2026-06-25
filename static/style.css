@@ -697,6 +697,153 @@ main.container { flex: 1; padding-block: 2.75rem; }
 
 .editor-actions { display: flex; gap: .625rem; }
 
+/* ── ML Notes ────────────────────────────────────────────────── */
+.ml-sections {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.ml-card {
+  border: 1px solid var(--green-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: box-shadow .2s;
+}
+.ml-card.is-open {
+  box-shadow: 0 4px 20px rgba(78,125,106,.12);
+}
+
+.ml-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.125rem 1.5rem;
+  background: var(--green-subtle);
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s;
+}
+.ml-header:hover { background: #d8ebe3; }
+
+.ml-num {
+  font-family: ui-monospace, 'JetBrains Mono', monospace;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--green-border);
+  line-height: 1;
+  flex-shrink: 0;
+  min-width: 2.75rem;
+  letter-spacing: -.02em;
+}
+.ml-card.is-open .ml-num { color: var(--green); }
+
+.ml-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.ml-title {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -.015em;
+  color: var(--fg);
+}
+
+.ml-tags {
+  display: block;
+  font-size: .8125rem;
+  color: var(--muted);
+  margin-top: .25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ml-count {
+  font-size: .8125rem;
+  color: var(--faint);
+  flex-shrink: 0;
+}
+
+.ml-icon {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--green);
+  flex-shrink: 0;
+  width: 1.5rem;
+  text-align: center;
+  line-height: 1;
+  transition: transform .2s;
+}
+.ml-card.is-open .ml-icon { transform: rotate(45deg); }
+
+.ml-body {
+  display: none;
+  border-top: 1px solid var(--green-border);
+  background: var(--bg-card);
+}
+.ml-card.is-open .ml-body { display: block; }
+
+.ml-prose {
+  padding: 1.5rem 2rem;
+}
+
+.ml-prose ul {
+  columns: 3;
+  column-gap: 2.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ml-prose li {
+  break-inside: avoid;
+  position: relative;
+  padding: .25rem 0 .25rem 1rem;
+  font-size: .8125rem;
+  color: var(--fg-2);
+  line-height: 1.5;
+  margin-top: 0 !important;
+}
+.ml-prose li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-size: 1.1rem;
+  line-height: 1.35;
+}
+
+.ml-prose strong { font-weight: 600; color: var(--fg); }
+
+.ml-prose h3 {
+  font-size: .6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--green);
+  margin-top: 1.5rem;
+  margin-bottom: .5rem;
+  column-span: all;
+}
+
+.ml-prose ol {
+  columns: 2;
+  column-gap: 2rem;
+  padding-left: 1.25rem;
+  font-size: .8125rem;
+  color: var(--fg-2);
+  line-height: 1.5;
+  margin-top: .5rem;
+}
+.ml-prose ol li { break-inside: avoid; margin-top: .4rem !important; }
+.ml-prose ol li::before { display: none; }
+
+.ml-prose > p { font-size: .8125rem; color: var(--muted); margin-top: .75rem; }
+.ml-prose hr { display: none; }
+
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 520px) {
   .post-link { grid-template-columns: 1fr; gap: .25rem; }
