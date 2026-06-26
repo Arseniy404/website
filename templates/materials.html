@@ -170,6 +170,28 @@ main.container { max-width: 1080px; }
 }
 .module-questions li strong { color: var(--fg); }
 
+/* topic links */
+.topic-group li { cursor: pointer; transition: color .15s; }
+.topic-group li:hover { color: var(--green); }
+.topic-group li a.topic-link {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  margin-left: -16px;
+  padding-left: 16px;
+}
+.topic-group li a.topic-link:hover { color: var(--green); }
+.topic-group li.has-note::before { color: var(--green); font-weight: 700; }
+.topic-group li.has-note a.topic-link { color: var(--fg); font-weight: 600; }
+.topic-group li.has-note::after {
+  content: '·';
+  position: absolute;
+  right: 0;
+  color: var(--green);
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+
 @media (max-width: 640px) {
   .module-header { flex-direction: column; align-items: flex-start; gap: 12px; }
   .module-right { flex-direction: row; align-self: flex-end; }
@@ -178,7 +200,7 @@ main.container { max-width: 1080px; }
 
 <div class="page-header ml-head">
   <h1>ML Interview Prep</h1>
-  <p>Нажмите на раздел, чтобы развернуть содержание</p>
+  <p>Click a section to expand</p>
 </div>
 
       <div class="modules-list">
@@ -188,98 +210,98 @@ main.container { max-width: 1080px; }
             <div class="module-meta">
               <span class="module-num">01</span>
               <div class="module-info">
-                <h3>Основы ML</h3>
-                <p>Основы машинного обучения · Классические алгоритмы · Feature Engineering · Дисбаланс классов</p>
+                <h3>ML Basics</h3>
+                <p>Fundamentals · Classical Algorithms · Feature Engineering · Class Imbalance</p>
               </div>
             </div>
             <div class="module-right">
-              <span class="module-duration">33 темы</span>
+              <span class="module-duration">33 topics</span>
               <span class="module-toggle">+</span>
             </div>
           </div>
           <div class="module-body">
             <div class="module-topics">
               <div class="topic-group">
-                <h4>Основы машинного обучения</h4>
+                <h4>Fundamentals</h4>
                 <ul>
-                  <li>Supervised / Unsupervised / Semi-supervised / Reinforcement learning (с метками / без / частично / по награде)</li>
-                  <li>Классификация vs регрессия (классы vs числа)</li>
-                  <li><strong>Bias vs Variance</strong> — систематическая vs случайная ошибка, разложение ошибки</li>
-                  <li>Переобучение (overfitting) и недообучение (underfitting)</li>
-                  <li>Разбиение train / validation / test</li>
-                  <li>Кросс-валидация (k-fold, оценка стабильности)</li>
-                  <li>Масштабирование признаков (нормализация)</li>
-                  <li>Отбор признаков (feature selection)</li>
-                  <li>Утечка данных (data leakage) — инфо из теста просочилась в обучение</li>
+                  <li>Supervised / Unsupervised / Semi-supervised / RL</li>
+                  <li>Classification vs Regression</li>
+                  <li><strong>Bias vs Variance</strong></li>
+                  <li>Overfitting and Underfitting</li>
+                  <li>Train / Val / Test Split</li>
+                  <li>Cross-validation</li>
+                  <li>Feature Scaling</li>
+                  <li>Feature Selection</li>
+                  <li>Data Leakage</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>Классические алгоритмы</h4>
+                <h4>Classical Algorithms</h4>
                 <ul>
-                  <li>Линейная регрессия (линейная зависимость)</li>
-                  <li>Логистическая регрессия (вероятностная классификация)</li>
-                  <li>Деревья решений</li>
-                  <li>Random Forest (ансамбль деревьев, бэггинг)</li>
-                  <li>Градиентный бустинг (XGBoost, LightGBM, CatBoost)</li>
-                  <li>SVM (максимизация отступа)</li>
-                  <li>KNN (ближайшие соседи)</li>
-                  <li>Naive Bayes (наивное предположение о независимости)</li>
-                  <li>PCA (уменьшение размерности)</li>
-                  <li>Кластеризация (k-means, иерархическая, DBSCAN)</li>
+                  <li>Linear Regression</li>
+                  <li>Logistic Regression</li>
+                  <li>Decision Trees</li>
+                  <li>Random Forest</li>
+                  <li>Gradient Boosting</li>
+                  <li>SVM</li>
+                  <li>KNN</li>
+                  <li>Naive Bayes</li>
+                  <li>PCA</li>
+                  <li>Clustering</li>
                 </ul>
               </div>
               <div class="topic-group">
                 <h4>Feature Engineering</h4>
                 <ul>
-                  <li>One-hot encoding (категории → бинарные столбцы)</li>
-                  <li>Label encoding (категории → числа)</li>
-                  <li>Target / mean encoding (кодирование таргетом + риск утечки)</li>
-                  <li>Полиномиальные признаки и взаимодействия</li>
-                  <li>Нормализация / стандартизация</li>
-                  <li>Обработка пропусков (импутация)</li>
-                  <li>Детекция выбросов (outlier detection)</li>
-                  <li>Уменьшение размерности</li>
+                  <li>One-hot Encoding</li>
+                  <li>Label Encoding</li>
+                  <li>Target / Mean Encoding</li>
+                  <li>Polynomial Features</li>
+                  <li>Normalization / Standardization</li>
+                  <li>Missing Value Imputation</li>
+                  <li>Outlier Detection</li>
+                  <li>Dimensionality Reduction</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>Дисбаланс классов</h4>
+                <h4>Class Imbalance</h4>
                 <ul>
-                  <li>Resampling: oversampling, undersampling</li>
-                  <li>SMOTE и его варианты (синтетические примеры)</li>
-                  <li>Взвешивание классов (class weights в лоссе)</li>
-                  <li>Focal loss (фокус на трудных примерах)</li>
-                  <li>Подбор порога (threshold tuning) вместо дефолтного 0.5</li>
-                  <li>Почему accuracy здесь бесполезна → выбор PR-AUC, F1, recall</li>
+                  <li>Resampling</li>
+                  <li>SMOTE</li>
+                  <li>Class Weights</li>
+                  <li>Focal Loss</li>
+                  <li>Threshold Tuning</li>
+                  <li>Why Accuracy Fails Here</li>
                 </ul>
               </div>
             </div>
             <div class="module-project module-questions">
-              <span class="project-label">Вопросы с собеседований</span>
+              <span class="project-label">Interview Questions</span>
               <div class="q-block">
-                <span class="q-theme">Логистическая регрессия</span>
+                <span class="q-theme">Logistic Regression</span>
                 <ul>
-                  <li>Почему функционал потерь выглядит именно так и откуда он взялся? Можно ли заменить на MSE?</li>
-                  <li>Зачем логарифмируем правдоподобие? (численная устойчивость, производная суммы проще, SGD по сумме объектов)</li>
-                  <li>Можно ли заменить сигмоиду на другую функцию? Что от неё требуется?</li>
-                  <li>Сойдёмся ли к одному решению из разных начальных весов? (выпуклость)</li>
-                  <li>Нужно ли нормировать признаки и на что это влияет?</li>
+                  <li>Why does the loss function have this form? Can it be replaced with MSE?</li>
+                  <li>Why log-likelihood? (numerical stability, simpler gradient, SGD over samples)</li>
+                  <li>Can sigmoid be replaced? What properties does the activation need?</li>
+                  <li>Do we converge to the same solution from different initializations? (convexity)</li>
+                  <li>Should features be normalized, and what does it affect?</li>
                 </ul>
               </div>
               <div class="q-block">
-                <span class="q-theme">Ансамбли деревьев</span>
+                <span class="q-theme">Tree Ensembles</span>
                 <ul>
-                  <li>Как выбрать глубину дерева для бустинга и для RF, и почему по-разному?</li>
-                  <li>Что такое bias и variance в разложении ошибки?</li>
-                  <li>Что должно возвращать дерево, чтобы решать бустингом классификацию?</li>
-                  <li>Как с помощью RF оценить важность признаков?</li>
-                  <li>Можно ли переобучиться, увеличивая число деревьев? (RF — почти нет, бустинг — да)</li>
+                  <li>How to choose tree depth for boosting vs RF, and why differently?</li>
+                  <li>What is bias and variance in the error decomposition?</li>
+                  <li>What should a tree output for boosting to solve classification?</li>
+                  <li>How to estimate feature importance with RF?</li>
+                  <li>Can you overfit by adding more trees? (RF — barely, boosting — yes)</li>
                 </ul>
               </div>
               <div class="q-block">
-                <span class="q-theme">Переобучение и регуляризация</span>
+                <span class="q-theme">Overfitting and Regularization</span>
                 <ul>
-                  <li>Почему регуляризация помогает с переобучением?</li>
-                  <li>Почему L1 зануляет часть весов? (геометрия ромба vs субградиент в нуле)</li>
+                  <li>Why does regularization help with overfitting?</li>
+                  <li>Why does L1 sparsify weights? (diamond geometry / subgradient at zero)</li>
                 </ul>
               </div>
             </div>
@@ -291,64 +313,64 @@ main.container { max-width: 1080px; }
             <div class="module-meta">
               <span class="module-num">02</span>
               <div class="module-info">
-                <h3>Оптимизация и обучение</h3>
-                <p>Функции потерь · Оптимизация · Hyperparameter tuning</p>
+                <h3>Optimization and Training</h3>
+                <p>Loss Functions · Optimization · Hyperparameter Tuning</p>
               </div>
             </div>
             <div class="module-right">
-              <span class="module-duration">21 тема</span>
+              <span class="module-duration">21 topics</span>
               <span class="module-toggle">+</span>
             </div>
           </div>
           <div class="module-body">
             <div class="module-topics">
               <div class="topic-group">
-                <h4>Функции потерь</h4>
+                <h4>Loss Functions</h4>
                 <ul>
-                  <li>MSE (ошибка регрессии)</li>
-                  <li>MAE (робастная регрессия)</li>
-                  <li>Cross-entropy (классификация)</li>
-                  <li>Hinge loss (SVM)</li>
-                  <li>KL-дивергенция (расхождение распределений)</li>
-                  <li>Focal loss (дисбаланс)</li>
-                  <li>Кастомный лосс (специальные задачи)</li>
+                  <li>MSE</li>
+                  <li>MAE</li>
+                  <li>Cross-entropy</li>
+                  <li>Hinge Loss</li>
+                  <li>KL Divergence</li>
+                  <li>Focal Loss</li>
+                  <li>Custom Loss</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>Оптимизация</h4>
+                <h4>Optimization</h4>
                 <ul>
-                  <li>Градиентный спуск (направление антиградиента)</li>
-                  <li>Стохастический GD и mini-batch</li>
-                  <li>Learning rate и его расписания (warmup, decay, cosine)</li>
-                  <li>Momentum / Nesterov (ускорение, «предвидение»)</li>
-                  <li><strong>Adam / AdamW</strong> (адаптивный шаг; AdamW — корректный weight decay, дефолт)</li>
-                  <li>RMSProp (адаптивная скорость)</li>
-                  <li>Инициализация весов (Xavier, He)</li>
-                  <li>Сходимость GD: гарантии для выпуклых задач, локальные минимумы в нейросетях</li>
-                  <li>Почему метод Ньютона не используют для нейросетей (стоимость гессиана)</li>
+                  <li>Gradient Descent</li>
+                  <li>SGD and Mini-batch</li>
+                  <li>Learning Rate Schedules</li>
+                  <li>Momentum / Nesterov</li>
+                  <li><strong>Adam / AdamW</strong></li>
+                  <li>RMSProp</li>
+                  <li>Weight Initialization</li>
+                  <li>GD Convergence</li>
+                  <li>Newton's Method Limitations</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>Hyperparameter tuning</h4>
+                <h4>Hyperparameter Tuning</h4>
                 <ul>
-                  <li>Grid search (полный перебор)</li>
-                  <li>Random search (часто эффективнее grid)</li>
-                  <li>Bayesian optimization (умный поиск)</li>
-                  <li>Hyperband / ASHA (ресурсоэффективные)</li>
-                  <li>Расписания learning rate (warmup, decay)</li>
+                  <li>Grid Search</li>
+                  <li>Random Search</li>
+                  <li>Bayesian Optimization</li>
+                  <li>Hyperband / ASHA</li>
+                  <li>LR Warm-up and Decay</li>
                 </ul>
               </div>
             </div>
             <div class="module-project module-questions">
-              <span class="project-label">Вопросы с собеседований</span>
+              <span class="project-label">Interview Questions</span>
               <div class="q-block">
-                <span class="q-theme">Оптимизация (нейросети и логрег)</span>
+                <span class="q-theme">Optimization</span>
                 <ul>
-                  <li>Сходится ли градиентный спуск? Есть ли гарантии?</li>
-                  <li>Какие есть модификации GD? (Adam, метод Ньютона)</li>
-                  <li>Почему метод Ньютона не используют в обучении нейросетей?</li>
-                  <li>Зачем в Adam делить градиенты на второй момент?</li>
-                  <li>Как влияет начальное приближение весов на решение?</li>
+                  <li>Does gradient descent converge? Are there guarantees?</li>
+                  <li>What are the main GD variants?</li>
+                  <li>Why is Newton's method not used for neural network training?</li>
+                  <li>Why divide gradients by the second moment in Adam?</li>
+                  <li>How does weight initialization affect training?</li>
                 </ul>
               </div>
             </div>
@@ -361,84 +383,84 @@ main.container { max-width: 1080px; }
               <span class="module-num">03</span>
               <div class="module-info">
                 <h3>Deep Learning</h3>
-                <p>Deep Learning — основы · Регуляризация и нормализация · Архитектуры нейросетей · CNN и Computer Vision · RNN / Sequential data</p>
+                <p>Fundamentals · Regularization · Architectures · CNN / CV · RNN / Sequential Data</p>
               </div>
             </div>
             <div class="module-right">
-              <span class="module-duration">30 тем</span>
+              <span class="module-duration">30 topics</span>
               <span class="module-toggle">+</span>
             </div>
           </div>
           <div class="module-body">
             <div class="module-topics">
               <div class="topic-group">
-                <h4>Deep Learning — основы</h4>
+                <h4>Fundamentals</h4>
                 <ul>
-                  <li>Нейросеть (слои + веса), перцептрон</li>
-                  <li>Функции активации (ReLU, sigmoid, tanh, GELU) — зачем нужна нелинейность</li>
-                  <li>Backpropagation (обратное распространение ошибки)</li>
-                  <li>Batch normalization (стабилизация обучения)</li>
-                  <li>Dropout (регуляризация; как работает на инференсе)</li>
-                  <li>Затухающие / взрывающиеся градиенты и борьба с ними</li>
-                  <li>Residual / skip connections (что решают)</li>
+                  <li>Neural Networks and Perceptrons</li>
+                  <li>Activation Functions</li>
+                  <li>Backpropagation</li>
+                  <li>Batch Normalization</li>
+                  <li>Dropout</li>
+                  <li>Vanishing / Exploding Gradients</li>
+                  <li>Residual Connections</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>Регуляризация и нормализация</h4>
+                <h4>Regularization and Normalization</h4>
                 <ul>
-                  <li><strong>L1 / L2</strong> — отличие, почему L1 зануляет веса</li>
-                  <li>Dropout (случайное отключение нейронов)</li>
-                  <li>Weight decay (связь и отличие от L2 в Adam vs AdamW)</li>
-                  <li>Batch norm vs Layer norm (по батчу vs по признакам)</li>
-                  <li>Data augmentation (искусственное расширение данных)</li>
-                  <li>Label smoothing (смягчение меток)</li>
-                  <li>Early stopping (ранняя остановка по валидации)</li>
-                  <li>Gradient clipping (стабильность при взрывах градиента)</li>
+                  <li><strong>L1 / L2 Regularization</strong></li>
+                  <li>Dropout</li>
+                  <li>Weight Decay</li>
+                  <li>Batch Norm vs Layer Norm</li>
+                  <li>Data Augmentation</li>
+                  <li>Label Smoothing</li>
+                  <li>Early Stopping</li>
+                  <li>Gradient Clipping</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>Архитектуры нейросетей</h4>
+                <h4>Architectures</h4>
                 <ul>
-                  <li><strong>CNN</strong> — свёртки, изображения</li>
-                  <li><strong>RNN / LSTM / GRU</strong> — последовательности, долгосрочные зависимости</li>
-                  <li><strong>Transformer</strong> — attention-based</li>
-                  <li>Encoder-Decoder (seq2seq)</li>
-                  <li>Pretrained models и transfer learning</li>
+                  <li><strong>CNN</strong></li>
+                  <li><strong>RNN / LSTM / GRU</strong></li>
+                  <li><strong>Transformer</strong></li>
+                  <li>Encoder-Decoder</li>
+                  <li>Transfer Learning</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>CNN и Computer Vision</h4>
+                <h4>CNN and Computer Vision</h4>
                 <ul>
-                  <li>Свёртка, ядра / фильтры (детекторы признаков)</li>
-                  <li>Pooling (подвыборка), stride, padding</li>
-                  <li>Сколько обучаемых параметров в свёрточном слое</li>
-                  <li>Batch norm, residual networks (ResNet)</li>
-                  <li>Transfer learning с предобученных backbone</li>
+                  <li>Convolution and Filters</li>
+                  <li>Pooling, Stride, Padding</li>
+                  <li>Conv Layer Parameters</li>
+                  <li>ResNet</li>
+                  <li>Pretrained Backbone</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>RNN / Sequential data</h4>
+                <h4>RNN and Sequential Data</h4>
                 <ul>
-                  <li>Vanilla RNN, LSTM (долгая память), GRU (упрощённая LSTM)</li>
-                  <li>Teacher forcing (обучение seq2seq)</li>
-                  <li>Bidirectional RNN (контекст с двух сторон)</li>
-                  <li>Sequence-to-sequence (машинный перевод)</li>
-                  <li>Attention поверх RNN (мост к трансформерам)</li>
+                  <li>RNN / LSTM / GRU</li>
+                  <li>Teacher Forcing</li>
+                  <li>Bidirectional RNN</li>
+                  <li>Sequence-to-sequence</li>
+                  <li>Attention over RNN</li>
                 </ul>
               </div>
             </div>
             <div class="module-project module-questions">
-              <span class="project-label">Вопросы с собеседований</span>
+              <span class="project-label">Interview Questions</span>
               <div class="q-block">
-                <span class="q-theme">Нейронные сети</span>
+                <span class="q-theme">Neural Networks</span>
                 <ul>
-                  <li>Зачем нужны нелинейности? Можно ли без них?</li>
-                  <li>Сколько обучаемых параметров в свёрточном слое?</li>
-                  <li>Как устроен batch-norm, чем отличается от аналогов и зачем нужен?</li>
-                  <li>Какую проблему решает residual и как помогает?</li>
-                  <li>Как бороться со взрывающимися градиентами?</li>
-                  <li>Как устроен backward в PyTorch? Как реализовать кастомный?</li>
-                  <li>Как используется dropout на инференсе?</li>
+                  <li>Why are nonlinearities needed? Can we do without them?</li>
+                  <li>How many trainable parameters does a conv layer have?</li>
+                  <li>How does batch norm work, how does it differ from alternatives?</li>
+                  <li>What problem do residual connections solve?</li>
+                  <li>How to handle exploding gradients?</li>
+                  <li>How does autograd work in PyTorch? How to implement a custom backward?</li>
+                  <li>How is dropout used at inference?</li>
                 </ul>
               </div>
             </div>
@@ -450,55 +472,55 @@ main.container { max-width: 1080px; }
             <div class="module-meta">
               <span class="module-num">04</span>
               <div class="module-info">
-                <h3>Transformers и LLM</h3>
-                <p>Transformers и Attention · LLM и современный NLP</p>
+                <h3>Transformers and LLMs</h3>
+                <p>Transformers and Attention · LLMs and Modern NLP</p>
               </div>
             </div>
             <div class="module-right">
-              <span class="module-duration">18 тем</span>
+              <span class="module-duration">18 topics</span>
               <span class="module-toggle">+</span>
             </div>
           </div>
           <div class="module-body">
             <div class="module-topics">
               <div class="topic-group">
-                <h4>Transformers и Attention</h4>
+                <h4>Transformers and Attention</h4>
                 <ul>
-                  <li><strong>Self-attention</strong> (внутри последовательности), формула QKVᵀ</li>
-                  <li><strong>Почему делят на √dₖ</strong> (контроль дисперсии перед softmax)</li>
-                  <li>Multi-head attention (разные проекции)</li>
-                  <li><strong>Сложность O(n²)</strong> по длине; sparse, linear, sliding window, FlashAttention</li>
-                  <li>Позиционное кодирование: синусоидальное vs <strong>RoPE</strong> vs ALiBi</li>
-                  <li>Masking (padding, causal)</li>
-                  <li>Feed-forward блок, LayerNorm, residuals</li>
-                  <li>Encoder-only / decoder-only / encoder-decoder (BERT vs GPT vs T5)</li>
+                  <li><strong>Self-attention</strong></li>
+                  <li><strong>Scaling by √dₖ</strong></li>
+                  <li>Multi-head Attention</li>
+                  <li><strong>O(n²) Complexity and Efficient Attention</strong></li>
+                  <li>Positional Encoding</li>
+                  <li>Masking</li>
+                  <li>FFN, LayerNorm, Residuals</li>
+                  <li>Encoder-only vs Decoder-only vs Encoder-Decoder</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>LLM и современный NLP</h4>
+                <h4>LLMs and Modern NLP</h4>
                 <ul>
-                  <li>Токенизация: BPE, WordPiece, SentencePiece</li>
-                  <li>Embeddings, контекстное окно</li>
-                  <li>Pretraining → SFT → согласование (RLHF / DPO / RLAIF)</li>
-                  <li>Fine-tuning: full FT vs <strong>LoRA / QLoRA / PEFT</strong>, prompt-tuning</li>
-                  <li><strong>RAG</strong> (retrieval-augmented generation), vector DB, поиск по эмбеддингам</li>
-                  <li>Инференс: KV-cache, квантизация (GPTQ, AWQ, GGUF), speculative decoding</li>
-                  <li>Scaling laws (Chinchilla), Mixture-of-Experts (MoE)</li>
-                  <li>Промптинг: few-shot, chain-of-thought</li>
-                  <li>Галлюцинации и их снижение</li>
-                  <li>Оценка LLM: бенчмарки, LLM-as-a-judge, human eval</li>
+                  <li>Tokenization</li>
+                  <li>Embeddings and Context Window</li>
+                  <li>Pretraining → SFT → Alignment</li>
+                  <li>Fine-tuning and <strong>LoRA / QLoRA / PEFT</strong></li>
+                  <li><strong>RAG</strong></li>
+                  <li>Inference Optimization</li>
+                  <li>Scaling Laws and MoE</li>
+                  <li>Prompting</li>
+                  <li>Hallucinations</li>
+                  <li>LLM Evaluation</li>
                 </ul>
               </div>
             </div>
             <div class="module-project module-questions">
-              <span class="project-label">Вопросы с собеседований</span>
+              <span class="project-label">Interview Questions</span>
               <div class="q-block">
-                <span class="q-theme">Трансформеры</span>
+                <span class="q-theme">Transformers</span>
                 <ul>
-                  <li>Зачем в attention делят на √dₖ?</li>
-                  <li>Какова вычислительная и по памяти сложность self-attention? Как её снижают?</li>
-                  <li>Чем decoder-only (GPT) отличается от encoder-decoder (T5) и encoder-only (BERT)?</li>
-                  <li>Как работает позиционное кодирование и зачем RoPE вместо синусоид?</li>
+                  <li>Why scale attention scores by √dₖ?</li>
+                  <li>What is the compute and memory complexity of self-attention? How to reduce it?</li>
+                  <li>How does decoder-only (GPT) differ from encoder-decoder (T5) and encoder-only (BERT)?</li>
+                  <li>How does positional encoding work, and why RoPE over sinusoidal?</li>
                 </ul>
               </div>
             </div>
@@ -510,48 +532,48 @@ main.container { max-width: 1080px; }
             <div class="module-meta">
               <span class="module-num">05</span>
               <div class="module-info">
-                <h3>Генеративные и вероятностные модели</h3>
-                <p>Генеративные модели · Вероятностный ML · Reinforcement Learning</p>
+                <h3>Generative and Probabilistic Models</h3>
+                <p>Generative Models · Probabilistic ML · Reinforcement Learning</p>
               </div>
             </div>
             <div class="module-right">
-              <span class="module-duration">18 тем</span>
+              <span class="module-duration">18 topics</span>
               <span class="module-toggle">+</span>
             </div>
           </div>
           <div class="module-body">
             <div class="module-topics">
               <div class="topic-group">
-                <h4>Генеративные модели</h4>
+                <h4>Generative Models</h4>
                 <ul>
-                  <li>Autoencoders (кодирование → декодирование)</li>
-                  <li>VAE (вариационный автоэнкодер)</li>
-                  <li>GAN (генеративно-состязательные сети)</li>
-                  <li>Diffusion models (обратный процесс зашумления)</li>
-                  <li>Normalizing flows (обратимые преобразования)</li>
-                  <li>Conditional generation (условная генерация)</li>
-                  <li>Оценка: FID, IS, likelihood, human eval</li>
+                  <li>Autoencoders</li>
+                  <li>VAE</li>
+                  <li>GANs</li>
+                  <li>Diffusion Models</li>
+                  <li>Normalizing Flows</li>
+                  <li>Conditional Generation</li>
+                  <li>Generative Evaluation Metrics</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>Вероятностный ML</h4>
+                <h4>Probabilistic ML</h4>
                 <ul>
-                  <li>Байесовский вывод; prior / posterior</li>
-                  <li>MLE / MAP (правдоподобия / апостериори)</li>
-                  <li>Гауссовские процессы (непараметрика)</li>
-                  <li>Вариационный вывод (аппроксимация)</li>
-                  <li>Методы Монте-Карло (sampling, MCMC)</li>
+                  <li>Bayesian Inference</li>
+                  <li>MLE / MAP</li>
+                  <li>Gaussian Processes</li>
+                  <li>Variational Inference</li>
+                  <li>Monte Carlo Methods</li>
                 </ul>
               </div>
               <div class="topic-group">
                 <h4>Reinforcement Learning</h4>
                 <ul>
-                  <li>MDP (состояние, действие, награда)</li>
-                  <li>Policy / Value function (стратегия / ценность)</li>
-                  <li>Q-learning, Deep Q-Network (DQN)</li>
-                  <li>Policy gradient (обновление политики)</li>
-                  <li>Actor-Critic (комбинированный метод)</li>
-                  <li>Exploration vs Exploitation (баланс)</li>
+                  <li>MDP</li>
+                  <li>Policy and Value Functions</li>
+                  <li>Q-learning / DQN</li>
+                  <li>Policy Gradient</li>
+                  <li>Actor-Critic</li>
+                  <li>Exploration vs Exploitation</li>
                 </ul>
               </div>
             </div>
@@ -563,76 +585,76 @@ main.container { max-width: 1080px; }
             <div class="module-meta">
               <span class="module-num">06</span>
               <div class="module-info">
-                <h3>Метрики, валидация, эксперименты</h3>
-                <p>Метрики: классификация · Метрики: регрессия, ранжирование, NLP · Time Series · Causal Inference и эксперименты</p>
+                <h3>Metrics, Validation and Experiments</h3>
+                <p>Classification Metrics · Regression / Ranking / NLP Metrics · Time Series · Causal Inference</p>
               </div>
             </div>
             <div class="module-right">
-              <span class="module-duration">19 тем</span>
+              <span class="module-duration">19 topics</span>
               <span class="module-toggle">+</span>
             </div>
           </div>
           <div class="module-body">
             <div class="module-topics">
               <div class="topic-group">
-                <h4>Метрики: классификация</h4>
+                <h4>Classification Metrics</h4>
                 <ul>
-                  <li>Почему accuracy плоха и зачем столько метрик</li>
-                  <li>Precision / Recall / F1 (почему F1 — среднее гармоническое)</li>
-                  <li>ROC-AUC vs <strong>PR-AUC</strong> (что выбрать при дисбалансе)</li>
-                  <li>Confusion matrix</li>
-                  <li>Log-loss / cross-entropy</li>
-                  <li><strong>Калибровка вероятностей</strong>: Platt scaling, temperature scaling, reliability diagram</li>
+                  <li>Why Accuracy is Not Enough</li>
+                  <li>Precision / Recall / F1</li>
+                  <li>ROC-AUC vs <strong>PR-AUC</strong></li>
+                  <li>Confusion Matrix</li>
+                  <li>Log-loss</li>
+                  <li><strong>Probability Calibration</strong></li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>Метрики: регрессия, ранжирование, NLP</h4>
+                <h4>Regression, Ranking and NLP Metrics</h4>
                 <ul>
-                  <li>Регрессия: MSE, MAE, RMSE, R²</li>
-                  <li>Ранжирование / рекомендации: NDCG, MAP, MRR, Hit@k</li>
-                  <li>NLP / генерация: BLEU, ROUGE, chrF, <strong>BERTScore</strong>, perplexity</li>
+                  <li>Regression Metrics</li>
+                  <li>Ranking Metrics</li>
+                  <li>NLP Generation Metrics</li>
                 </ul>
               </div>
               <div class="topic-group">
                 <h4>Time Series</h4>
                 <ul>
-                  <li>Стационарность, сезонность, тренд</li>
-                  <li>ARIMA / SARIMA, экспоненциальное сглаживание</li>
-                  <li>Признаки для рядов (лаги, скользящие окна, календарные)</li>
-                  <li>Правильная валидация (time-based split, без утечки из будущего)</li>
-                  <li>Прогнозирование нейросетями (RNN, temporal CNN, трансформеры)</li>
+                  <li>Stationarity, Seasonality, Trend</li>
+                  <li>ARIMA / SARIMA</li>
+                  <li>Time Series Features</li>
+                  <li>Time-based Validation</li>
+                  <li>Neural Forecasting</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>Causal Inference и эксперименты</h4>
+                <h4>Causal Inference and Experiments</h4>
                 <ul>
-                  <li>A/B-тесты: дизайн, мощность, размер выборки</li>
-                  <li>Confounders, рандомизация</li>
-                  <li>Uplift modeling (эффект воздействия)</li>
-                  <li>Множественные сравнения (поправка Бонферрони)</li>
-                  <li>Почему тест-сет «изнашивается» при многократном использовании</li>
+                  <li>A/B Testing</li>
+                  <li>Confounders and Randomization</li>
+                  <li>Uplift Modeling</li>
+                  <li>Multiple Comparisons</li>
+                  <li>Test Set Contamination</li>
                 </ul>
               </div>
             </div>
             <div class="module-project module-questions">
-              <span class="project-label">Вопросы с собеседований</span>
+              <span class="project-label">Interview Questions</span>
               <div class="q-block">
-                <span class="q-theme">Метрики</span>
+                <span class="q-theme">Metrics</span>
                 <ul>
-                  <li>Чем плоха accuracy и зачем так много метрик?</li>
-                  <li>Можно ли максимизировать только precision (или recall), игнорируя вторую?</li>
-                  <li>Почему в F1 среднее гармоническое, а не арифметическое?</li>
-                  <li>Что лучше при дисбалансе — PR-AUC или ROC-AUC и почему?</li>
-                  <li>Как выглядит PR-кривая для случайного алгоритма?</li>
-                  <li>Почему ROC-AUC не меняется при изменении баланса, а PR-AUC меняется?</li>
+                  <li>What's wrong with accuracy and why do we need so many metrics?</li>
+                  <li>Can we maximize only precision (or recall) while ignoring the other?</li>
+                  <li>Why is F1 the harmonic mean rather than arithmetic?</li>
+                  <li>Which is better under class imbalance — PR-AUC or ROC-AUC?</li>
+                  <li>What does the PR curve look like for a random classifier?</li>
+                  <li>Why is ROC-AUC invariant to class balance while PR-AUC is not?</li>
                 </ul>
               </div>
               <div class="q-block">
-                <span class="q-theme">Статистическая значимость</span>
+                <span class="q-theme">Statistical Significance</span>
                 <ul>
-                  <li>Можно ли по одной тестовой выборке заключить, что модель кандидата лучше конкурента?</li>
-                  <li>Как «на коленке» оценить значимость различия метрик двух моделей? (статтест / бутстрап)</li>
-                  <li>Что делать с множественными сравнениями? Почему тест-сет «протирается»?</li>
+                  <li>Can you conclude from one test set that model A is better than model B?</li>
+                  <li>How to quickly estimate significance of metric differences? (statistical test / bootstrap)</li>
+                  <li>How to handle multiple comparisons? Why does the test set "wear out"?</li>
                 </ul>
               </div>
             </div>
@@ -644,49 +666,49 @@ main.container { max-width: 1080px; }
             <div class="module-meta">
               <span class="module-num">07</span>
               <div class="module-info">
-                <h3>Production и интерпретация</h3>
-                <p>Production / MLOps · Explainability · Практические задачи</p>
+                <h3>Production and Interpretability</h3>
+                <p>MLOps · Explainability · Practical Tasks</p>
               </div>
             </div>
             <div class="module-right">
-              <span class="module-duration">19 тем</span>
+              <span class="module-duration">19 topics</span>
               <span class="module-toggle">+</span>
             </div>
           </div>
           <div class="module-body">
             <div class="module-topics">
               <div class="topic-group">
-                <h4>Production / MLOps</h4>
+                <h4>MLOps</h4>
                 <ul>
-                  <li>Model serving (онлайн-инференс)</li>
-                  <li>Batch vs real-time режимы</li>
-                  <li>Мониторинг метрик качества в проде</li>
-                  <li>Drift detection (сдвиг данных и таргета)</li>
-                  <li>Версионирование данных и моделей</li>
-                  <li>Logging / alerting</li>
-                  <li>Оптимизация GPU/CPU, mixed precision (FP16/BF16)</li>
-                  <li>Воспроизводимость экспериментов</li>
+                  <li>Model Serving</li>
+                  <li>Batch vs Real-time</li>
+                  <li>Production Monitoring</li>
+                  <li>Data Drift Detection</li>
+                  <li>Data and Model Versioning</li>
+                  <li>Logging and Alerting</li>
+                  <li>Mixed Precision Training</li>
+                  <li>Experiment Reproducibility</li>
                 </ul>
               </div>
               <div class="topic-group">
                 <h4>Explainability</h4>
                 <ul>
-                  <li>Feature importance (для RF — permutation / impurity)</li>
-                  <li>SHAP / LIME (локальные объяснения)</li>
-                  <li>Partial dependence plots (глобальные эффекты)</li>
-                  <li>Saliency maps (визуализация для CV)</li>
-                  <li>Counterfactuals («что если»)</li>
+                  <li>Feature Importance</li>
+                  <li>SHAP / LIME</li>
+                  <li>Partial Dependence Plots</li>
+                  <li>Saliency Maps</li>
+                  <li>Counterfactuals</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>Практические задачи</h4>
+                <h4>Practical Tasks</h4>
                 <ul>
-                  <li>Регрессия, классификация, кластеризация / сегментация</li>
-                  <li>Прогноз временных рядов</li>
-                  <li>NLP (токенизация, embeddings, классификация, генерация)</li>
-                  <li>CV (detection, segmentation)</li>
-                  <li>Anomaly detection (поиск аномалий)</li>
-                  <li>Recommendation systems</li>
+                  <li>Regression, Classification, Clustering</li>
+                  <li>Time Series Forecasting</li>
+                  <li>NLP Tasks</li>
+                  <li>Computer Vision Tasks</li>
+                  <li>Anomaly Detection</li>
+                  <li>Recommendation Systems</li>
                 </ul>
               </div>
             </div>
@@ -698,40 +720,40 @@ main.container { max-width: 1080px; }
             <div class="module-meta">
               <span class="module-num">08</span>
               <div class="module-info">
-                <h3>Теория и senior-вопросы</h3>
-                <p>Теория и понимание · Часто задают на senior-уровне</p>
+                <h3>Theory and Senior Questions</h3>
+                <p>Core Theory · Senior Interview Topics</p>
               </div>
             </div>
             <div class="module-right">
-              <span class="module-duration">15 тем</span>
+              <span class="module-duration">15 topics</span>
               <span class="module-toggle">+</span>
             </div>
           </div>
           <div class="module-body">
             <div class="module-topics">
               <div class="topic-group">
-                <h4>Теория и понимание</h4>
+                <h4>Core Theory</h4>
                 <ul>
-                  <li>Bias-variance tradeoff</li>
-                  <li>Curse of dimensionality (проклятие размерности)</li>
-                  <li>Сходимость GD</li>
-                  <li>Почему глубокие сети обобщаются: double descent, lottery ticket, overparameterization</li>
-                  <li>Optimization landscapes (ландшафт потерь)</li>
-                  <li>Ограничения моделей и обобщающая способность</li>
-                  <li>Этика и fairness (предвзятость данных)</li>
+                  <li>Bias-variance Tradeoff</li>
+                  <li>Curse of Dimensionality</li>
+                  <li>GD Convergence</li>
+                  <li>Why Deep Networks Generalize</li>
+                  <li>Loss Landscapes</li>
+                  <li>Generalization Limits</li>
+                  <li>Fairness and Ethics</li>
                 </ul>
               </div>
               <div class="topic-group">
-                <h4>Часто задают на senior-уровне</h4>
+                <h4>Senior-level Topics</h4>
                 <ul>
-                  <li>Как диагностировать и лечить underfitting / overfitting</li>
-                  <li>Когда применять ансамбли и почему они стабильнее</li>
-                  <li>Чем отличаются CNN / RNN / Transformer и под какой тип данных каждый</li>
-                  <li>Почему Adam часто лучше SGD — и когда SGD выигрывает</li>
-                  <li>Как масштабировать обучение (distributed training, mixed precision)</li>
-                  <li>Как работать с несбалансированными выборками (resampling, веса, порог)</li>
-                  <li>Как оценивать генеративные модели (likelihood, FID, human eval)</li>
-                  <li>Self-attention vs рекуррентность: плюсы, минусы, сложность</li>
+                  <li>Diagnosing Underfitting / Overfitting</li>
+                  <li>When to Use Ensembles</li>
+                  <li>CNN vs RNN vs Transformer</li>
+                  <li>Adam vs SGD</li>
+                  <li>Scaling Training</li>
+                  <li>Handling Class Imbalance</li>
+                  <li>Evaluating Generative Models</li>
+                  <li>Self-attention vs Recurrence</li>
                 </ul>
               </div>
             </div>
@@ -740,9 +762,57 @@ main.container { max-width: 1080px; }
 
       </div>
 
+<style>
+/* topic links */
+.topic-group li { cursor: pointer; transition: color .15s; }
+.topic-group li:hover { color: var(--green); }
+.topic-group li a.topic-link {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  margin-left: -16px;
+  padding-left: 16px;
+}
+.topic-group li a.topic-link:hover { color: var(--green); }
+.topic-group li.has-note::before { color: var(--green); font-weight: 700; }
+.topic-group li.has-note a.topic-link { color: var(--fg); font-weight: 600; }
+.topic-group li.has-note::after {
+  content: '·';
+  position: absolute;
+  right: 0;
+  color: var(--green);
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+</style>
+
 <script>
 function toggleModule(n) {
   document.getElementById('module-' + n).classList.toggle('open');
 }
+
+(function () {
+  const existing = new Set({{ note_slugs | tojson }});
+
+  function slugify(text) {
+    return text.trim().toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/[\s-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  document.querySelectorAll('.topic-group li').forEach(li => {
+    const slug = slugify(li.textContent.trim());
+    if (!slug) return;
+
+    const a = document.createElement('a');
+    a.href = '/notes/' + encodeURIComponent(slug) + '?title=' + encodeURIComponent(li.textContent.trim());
+    a.className = 'topic-link';
+    while (li.firstChild) a.appendChild(li.firstChild);
+    li.appendChild(a);
+
+    if (existing.has(slug)) li.classList.add('has-note');
+  });
+})();
 </script>
 {% endblock %}

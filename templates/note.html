@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} — notes{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css">
+<style>
+  main.container { max-width: 1140px; }
+
+  .note-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .note-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -.02em;
+    line-height: 1.3;
+  }
+
+  /* ── Split editor (admin) ── */
+  .note-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    height: calc(100vh - 260px);
+    min-height: 380px;
+  }
+  .note-pane {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color .15s;
+  }
+  .note-pane:focus-within { border-color: var(--green-border); }
+
+  .pane-label {
+    padding: .45rem 1rem;
+    font-size: .7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+
+  #note-editor {
+    flex: 1;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: .875rem;
+    line-height: 1.7;
+    padding: 1rem;
+    resize: none;
+    border: none;
+    outline: none;
+    background: var(--bg-card);
+    color: var(--fg);
+  }
+
+  #note-preview {
+    flex: 1;
+    padding: 1rem 1.25rem;
+    overflow-y: auto;
+    background: var(--bg-card);
+  }
+  #note-preview.prose > * + * { margin-top: 1rem; }
+
+  .note-actions {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin-top: 1rem;
+  }
+
+  /* ── Read-only view ── */
+  .note-empty {
+    color: var(--faint);
+    font-size: .9375rem;
+    padding: 2rem 0;
+  }
+
+  @media (max-width: 700px) {
+    .note-split { grid-template-columns: 1fr; height: auto; }
+    #note-editor { min-height: 240px; }
+    #note-preview { min-height: 180px; }
+  }
+</style>
+
+<div class="note-header">
+  <h1>{{ title }}</h1>
+</div>
+
+{% if role == 'admin' %}
+<form method="post" action="/notes/{{ slug }}">
+  <div class="note-split">
+    <div class="note-pane">
+      <div class="pane-label">markdown</div>
+      <textarea id="note-editor" name="body" spellcheck="false">{{ content }}</textarea>
+    </div>
+    <div class="note-pane">
+      <div class="pane-label">preview</div>
+      <div id="note-preview" class="prose"></div>
+    </div>
+  </div>
+  <div class="note-actions">
+    <button type="submit" class="btn btn-primary">сохранить</button>
+    <a href="/materials" class="btn btn-ghost">← ml notes</a>
+  </div>
+</form>
+
+{% else %}
+{% if content %}
+<div id="note-content" class="prose"></div>
+{% else %}
+<p class="note-empty">нет заметки</p>
+{% endif %}
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@15/marked.min.js"></script>
+<script>
+// Math extension: intercepts $...$ and $$...$$ before marked touches underscores/carets
+const mathExtension = {
+  extensions: [
+    {
+      name: 'blockmath',
+      level: 'block',
+      start(src) { return src.indexOf('$$'); },
+      tokenizer(src) {
+        const m = src.match(/^\$\$([\s\S]+?)\$\$/);
+        if (m) return { type: 'blockmath', raw: m[0], text: m[1].trim() };
+      },
+      renderer(token) {
+        try {
+          return '<p>' + katex.renderToString(token.text, { displayMode: true, throwOnError: false }) + '</p>';
+        } catch(e) { return '<pre>' + token.raw + '</pre>'; }
+      }
+    },
+    {
+      name: 'inlinemath',
+      level: 'inline',
+      start(src) { return src.indexOf('$'); },
+      tokenizer(src) {
+        const m = src.match(/^\$([^$\n]+?)\$/);
+        if (m) return { type: 'inlinemath', raw: m[0], text: m[1] };
+      },
+      renderer(token) {
+        try {
+          return katex.renderToString(token.text, { displayMode: false, throwOnError: false });
+        } catch(e) { return token.raw; }
+      }
+    }
+  ]
+};
+marked.use(mathExtension);
+
+function renderNote(text, el) {
+  el.innerHTML = marked.parse(text);
+}
+
+{% if role == 'admin' %}
+const editor = document.getElementById('note-editor');
+const preview = document.getElementById('note-preview');
+renderNote(editor.value, preview);
+let timer;
+editor.addEventListener('input', () => {
+  clearTimeout(timer);
+  timer = setTimeout(() => renderNote(editor.value, preview), 200);
+});
+{% elif content %}
+renderNote({{ content | tojson }}, document.getElementById('note-content'));
+{% endif %}
+</script>
+
+{% endblock %}

@@ -4,6 +4,7 @@ import time
 from collections import defaultdict
 from datetime import date, datetime
 from pathlib import Path
+from urllib.parse import quote
 
 import bcrypt
 import bleach
@@ -20,6 +21,8 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).parent
 BLOG_DIR = BASE_DIR / "content" / "blog"
+NOTES_DIR = BASE_DIR / "content" / "notes"
+NOTES_DIR.mkdir(parents=True, exist_ok=True)
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me")
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "arseniy")
@@ -131,6 +134,17 @@ def slugify(title: str) -> str:
     return slug.strip("-")
 
 
+def extract_note_title(content: str, slug: str) -> str:
+    for line in content.splitlines():
+        if line.startswith("# "):
+            return line[2:].strip()
+    return slug.replace("-", " ")
+
+
+def get_note_slugs() -> set[str]:
+    return {p.stem for p in NOTES_DIR.glob("*.md")}
+
+
 # ── Session helpers ───────────────────────────────────────────
 def get_role(request: Request) -> str | None:
     """Returns 'admin', 'guest', or None."""
@@ -230,7 +244,8 @@ def materials_page(request: Request):
     return templates.TemplateResponse(
         request, "materials.html", {
             "role": get_role(request),
-            "breadcrumbs": [{"label": "ai agents", "url": None}],
+            "breadcrumbs": [{"label": "ml notes", "url": None}],
+            "note_slugs": list(get_note_slugs()),
         }
     )
 
@@ -264,6 +279,41 @@ def post(request: Request, slug: str):
                 },
             )
     raise HTTPException(status_code=404, detail="Post not found")
+
+
+# ── Notes routes ─────────────────────────────────────────────
+@app.get("/notes/{slug}", response_class=HTMLResponse)
+def note_page(request: Request, slug: str, title: str = ""):
+    require_site_access(request)
+    path = (NOTES_DIR / f"{slug}.md").resolve()
+    if not path.is_relative_to(NOTES_DIR.resolve()):
+        raise HTTPException(status_code=400)
+    content = path.read_text(encoding="utf-8") if path.exists() else ""
+    title = extract_note_title(content, slug) or title or slug.replace("-", " ")
+    role = get_role(request)
+    return templates.TemplateResponse(
+        request, "note.html", {
+            "slug": slug,
+            "title": title,
+            "content": content,
+            "body_html": render_markdown(content) if content else "",
+            "role": role,
+            "breadcrumbs": [
+                {"label": "ml notes", "url": "/materials"},
+                {"label": title, "url": None},
+            ],
+        }
+    )
+
+
+@app.post("/notes/{slug}")
+def note_save(request: Request, slug: str, body: str = Form("")):
+    require_admin(request)
+    path = (NOTES_DIR / f"{slug}.md").resolve()
+    if not path.is_relative_to(NOTES_DIR.resolve()):
+        raise HTTPException(status_code=400)
+    path.write_text(body, encoding="utf-8")
+    return RedirectResponse(f"/notes/{quote(slug, safe='-')}", status_code=303)
 
 
 # ── Admin routes ──────────────────────────────────────────────
