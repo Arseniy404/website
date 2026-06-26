@@ -100,6 +100,7 @@
 
 {% if role == 'admin' %}
 <form method="post" action="/notes/{{ slug }}">
+  <input type="hidden" name="note_title" value="{{ title }}">
   <div class="note-split">
     <div class="note-pane">
       <div class="pane-label">markdown</div>

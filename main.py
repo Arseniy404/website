@@ -288,31 +288,53 @@ def note_page(request: Request, slug: str, title: str = ""):
     path = (NOTES_DIR / f"{slug}.md").resolve()
     if not path.is_relative_to(NOTES_DIR.resolve()):
         raise HTTPException(status_code=400)
-    content = path.read_text(encoding="utf-8") if path.exists() else ""
-    title = extract_note_title(content, slug) or title or slug.replace("-", " ")
+
+    if path.exists():
+        post = frontmatter.load(path)
+        content = post.content
+        display_title = post.get("title", "") or title or slug.replace("-", " ")
+    else:
+        content = ""
+        display_title = title or slug.replace("-", " ")
+
     role = get_role(request)
     return templates.TemplateResponse(
         request, "note.html", {
             "slug": slug,
-            "title": title,
+            "title": display_title,
             "content": content,
             "body_html": render_markdown(content) if content else "",
             "role": role,
             "breadcrumbs": [
                 {"label": "ml notes", "url": "/materials"},
-                {"label": title, "url": None},
+                {"label": display_title, "url": None},
             ],
         }
     )
 
 
 @app.post("/notes/{slug}")
-def note_save(request: Request, slug: str, body: str = Form("")):
+def note_save(
+    request: Request,
+    slug: str,
+    body: str = Form(""),
+    note_title: str = Form(""),
+):
     require_admin(request)
     path = (NOTES_DIR / f"{slug}.md").resolve()
     if not path.is_relative_to(NOTES_DIR.resolve()):
         raise HTTPException(status_code=400)
-    path.write_text(body, encoding="utf-8")
+
+    existing_title = ""
+    if path.exists():
+        try:
+            existing_title = frontmatter.load(path).get("title", "")
+        except Exception:
+            pass
+
+    final_title = existing_title or note_title
+    post = frontmatter.Post(body, **{"title": final_title} if final_title else {})
+    path.write_text(frontmatter.dumps(post), encoding="utf-8")
     return RedirectResponse(f"/notes/{quote(slug, safe='-')}", status_code=303)
 
 
